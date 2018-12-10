@@ -1,7 +1,6 @@
 {
   "name": "ad-for-page",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "directories": {
     "example": "example"
@@ -14,5 +13,18 @@
   "devDependencies": {
     "browserify": "^16.2.3",
     "uglifyjs": "^2.4.11"
-  }
+  },
+  "dependencies": {
+    "browserify": "^16.2.3",
+    "uglifyjs": "^2.4.11"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zzfoo/ad-for-page.git"
+  },
+  "bugs": {
+    "url": "https://github.com/zzfoo/ad-for-page/issues"
+  },
+  "homepage": "https://github.com/zzfoo/ad-for-page#readme",
+  "description": ""
 }
