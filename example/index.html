@@ -1,0 +1,54 @@
+<html>
+  <head>
+    <title>IMA HTML5 Simple Demo</title>
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0001, minimum-scale=1.0001, maximum-scale=1.0001, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="format-detection" content="email=no">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta name="apple-mobile-web-app-title" content="Fat Jump">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="full-screen" content="yes">
+    <meta name="screen-orientation" content="portrait">
+    <meta name="browsermode" content="application">
+    <meta name="x5-fullscreen" content="true">
+    <meta name="x5-page-mode" content="app">
+    <meta name="x5-orientation" content="portrait">
+    <meta name="msapplication-tap-highlight" content="no">
+    <meta name="renderer" content="webkit">
+    <!-- <link rel="stylesheet" type="text/css" href="style.css"> -->
+    <style>
+        body {
+            margin:0;
+            padding:0;
+            border:0;
+        }
+        #ad-container {
+            width: 320px;
+            position: fixed;
+            bottom: 0px;
+            z-index: 99999;
+            margin: 0 auto;
+            /* justify-self: center; */
+            /* padding: 0 50% 0 50%; */
+            /* display: -webkit-box;
+            display: -moz-box;
+            display: -ms-box;
+            display: box;
+            -webkit-box-pack: center;
+            -moz-box-pack: center;
+            -ms-box-pack: center;
+            box-pack: center; */
+        }
+    </style>
+  </head>
+
+  <body>
+    <div id="ad-container">
+    </div>
+    <button id="playButton" onclick="hideAd()">Play</button>
+    <script type="text/javascript" src="../dist/adForPage.js"></script>
+    <script type="text/javascript" src="index.js"></script>
+  </body>
+</html>
