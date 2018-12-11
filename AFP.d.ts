@@ -48,7 +48,7 @@ declare namespace AFP {
         adUnitId,
         style: {
             /** e.g. 200 or '50%' */
-            width: number | string,
+            widths: number | string,
             /** e.g. 200 or '50%' */
             height: number | string,
             left?: number,

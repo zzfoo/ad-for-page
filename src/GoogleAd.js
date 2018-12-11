@@ -121,13 +121,13 @@ var proto = {
 
         window['adsbygoogle'].push({});
 
-        this._adCache[name] = {
+        var adInfo = {
             name: name,
             options: options,
             contianer: container,
         };
 
-        return name;
+        return adInfo;
     },
 
     showAd: function(name, callback) {
@@ -141,8 +141,8 @@ var proto = {
             }, 60)
         }
     },
-    hideAd: function (name) {
-        var adInfo = this.getAd(name);
+    hideAd: function (name, callback) {
+        var adInfo = this._adCache[name];
         if (adInfo.contianer) {
             this.hideContainer(adInfo.contianer);
         }

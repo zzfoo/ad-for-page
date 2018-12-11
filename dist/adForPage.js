@@ -16,12 +16,13 @@ var proto = {
     constructor: AdManager,
 
     init: function(options, callback) {
-        this._inited = false;
+        var Me = this;
+        this.inited = false;
         this._adIndex = 0;
         this._adCache = {};
         this.options = options;
         this.onInit(function(err) {
-            this._inited = true;
+            Me.inited = true;
             callback && callback(err);
         });
     },
@@ -199,13 +200,13 @@ var proto = {
 
         window['adsbygoogle'].push({});
 
-        this._adCache[name] = {
+        var adInfo = {
             name: name,
             options: options,
             contianer: container,
         };
 
-        return name;
+        return adInfo;
     },
 
     showAd: function(name, callback) {
@@ -219,8 +220,8 @@ var proto = {
             }, 60)
         }
     },
-    hideAd: function (name) {
-        var adInfo = this.getAd(name);
+    hideAd: function (name, callback) {
+        var adInfo = this._adCache[name];
         if (adInfo.contianer) {
             this.hideContainer(adInfo.contianer);
         }
