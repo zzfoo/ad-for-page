@@ -61,5 +61,20 @@ var switchAdState = function() {};
             }
         }
     })
+
+    var adForPageManager = new AFP.WechatAdManager();
+    var adName = null;
+    adForPageManager.init(null, function() {
+        adName = adForPageManager.createAd({
+            adUnitId: '',
+            style: {
+                width: '100%',
+                height: 200,
+                valign: 'bottom',
+                align: 'center',
+            }
+        })
+        adForPageManager.showAd(adName);
+    });
 }())
 

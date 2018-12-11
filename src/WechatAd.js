@@ -45,7 +45,7 @@ var proto = {
                 left = 0;
             }
         } else {
-            left = option.left || 0;
+            left = options.left || 0;
         }
 
         var top;
