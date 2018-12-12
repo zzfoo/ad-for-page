@@ -15,26 +15,13 @@ var proto = {
         callback(err);
     },
 
-    doCreateAd: function (options) {
+    alginAd: function(ad, style) {
         var windowWidth = this.windowWidth;
         var windowHeight = this.windowHeight;
-
-        var adUnitId = options.adUnitId;
-        var style = options.style;
         var width = style.width;
         var height = style.height;
         var align = style.align;
         var valign = style.valign;
-        if (!width || !height) {
-            throw new Error('need width and height');
-        }
-        if (typeof width !== 'number') {
-            width = this.parsePercentile(width) * windowWidth;
-        }
-        if (typeof height !== 'number') {
-            height = this.parsePercentile(height) * windowHeight;
-        }
-
         var left;
         if (align) {
             if (align === 'center') {
@@ -45,31 +32,61 @@ var proto = {
                 left = 0;
             }
         } else {
-            left = options.left || 0;
+            left = style.left || 0;
         }
 
         var top;
         if (valign) {
-            if (align === 'center') {
+            if (valign === 'center') {
                 top = (windowHeight - height) / 2;
-            } else if (align === 'bottom') {
+            } else if (valign === 'bottom') {
                 top = windowHeight - height;
-            } else if (align === 'top') {
+            } else if (valign === 'top') {
                 top = 0;
             }
         } else {
-            top = options.top || 0;
+            top = style.top || 0;
+        }
+        ad.style.left = left;
+        ad.style.top = top;
+    },
+
+    doCreateAd: function (options) {
+        var windowWidth = this.windowWidth;
+        var windowHeight = this.windowHeight;
+
+        var adUnitId = options.adUnitId;
+        var style = options.style;
+        var width = style.width;
+        var height = style.height;
+
+        if (typeof width === 'string') {
+            width = this.parsePercentile(width) * windowWidth;
+        }
+        if (typeof height === 'string') {
+            height = this.parsePercentile(height) * windowHeight;
         }
 
         var ad = wx.createBannerAd({
             adUnitId: adUnitId,
             style: {
-                left: left,
-                top: top,
+                left: 1,
+                top: 1,
                 width: width,
                 height: height,
             }
         });
+        var Me = this;
+        ad.onResize(function(res) {
+            Me.alginAd(ad, {
+                width: res.width,
+                height: res.height,
+                left: style.left,
+                top: style.top,
+                align: style.align,
+                valign: style.valign,
+            });
+        })
         return ad;
     },
 
@@ -78,7 +95,7 @@ var proto = {
     },
 
     showAd: function (name, callback) {
-        var ad = this._adCahe[name];
+        var ad = this._adCache[name];
         ad.show().then(function() {
             callback(null);
         }).catch(function(err) {
@@ -87,7 +104,7 @@ var proto = {
     },
 
     hideAd: function (name, callback) {
-        var ad = this._adCahe[name];
+        var ad = this._adCache[name];
         ad.hide().then(function() {
             callback(null);
         }).catch(function(err) {

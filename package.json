@@ -6,7 +6,8 @@
     "example": "example"
   },
   "scripts": {
-    "build": "browserify ./index.js > ./dist/adForPage.js -s AFP && uglifyjs -c -m -o ./dist/adForPage.min.js -- ./dist/adForPage.js"
+    "build": "browserify ./index.js > ./dist/adForPage.js -s AFP && uglifyjs -c -m -o ./dist/adForPage.min.js -- ./dist/adForPage.js",
+    "build-window": "browserify ./window-index.js > ./dist/window-adForPage.js && uglifyjs -c -m -o ./dist/window-adForPage.min.js -- ./dist/window-adForPage.js"
   },
   "author": "",
   "license": "ISC",
