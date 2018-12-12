@@ -87,14 +87,14 @@ var proto = {
                 valign: style.valign,
             });
         })
-        return ad;
+        return name;
     },
 
     parsePercentile: function (value) {
         return parseFloat(value.slice(0, -1)) / 100;
     },
 
-    showAd: function (name, callback) {
+    doShowAd: function (name, callback) {
         var ad = this._adCache[name];
         ad.show().then(function() {
             callback(null);
@@ -103,7 +103,7 @@ var proto = {
         })
     },
 
-    hideAd: function (name, callback) {
+    doHideAd: function (name, callback) {
         var ad = this._adCache[name];
         ad.hide().then(function() {
             callback(null);

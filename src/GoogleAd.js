@@ -130,7 +130,7 @@ var proto = {
         return adInfo;
     },
 
-    showAd: function(name, callback) {
+    doShowAd: function(name, callback) {
         var adInfo = this._adCache[name];
         if (adInfo.contianer) {
             this.showContainer(adInfo.contianer);
@@ -141,7 +141,7 @@ var proto = {
             }, 60)
         }
     },
-    hideAd: function (name, callback) {
+    doHideAd: function (name, callback) {
         var adInfo = this._adCache[name];
         if (adInfo.contianer) {
             this.hideContainer(adInfo.contianer);

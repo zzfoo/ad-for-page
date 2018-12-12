@@ -4,8 +4,14 @@ var AdManager = function() {};
 
 var proto = {
     constructor: AdManager,
+    disabled: false,
 
     init: function(options, callback) {
+        if (this.disabled) {
+            callback && callback();
+            return;
+        }
+
         var Me = this;
         this.inited = false;
         this._adIndex = 0;
@@ -25,6 +31,7 @@ var proto = {
     },
 
     createAd: function(options, name) {
+        if (this.disabled) return;
         name = name || this._generateName();
         var ad = this.doCreateAd(options);
         this._adCache[name] = ad;
@@ -38,22 +45,36 @@ var proto = {
 
     // user implement
     showAd: function(name, callback) {
+        if (this.disabled) {
+            callback && callback();
+            return;
+        };
+        this.doShowAd(name, callback);
+    },
+
+    doShowAd: function(name, callback) {
         if (callback) {
             setTimeout(function() {
                 callback(null);
             }, 60);
         }
-        return true;
     },
 
     // user implement
     hideAd: function(name, callback) {
+        if (this.disabled) {
+            callback && callback();
+            return;
+        };
+        this.doHideAd(name, callback);
+    },
+
+    doHideAd: function(name, callback) {
         if (callback) {
             setTimeout(function() {
                 callback(null);
             }, 60);
         }
-        return true;
     },
 
     _generateName: function() {
