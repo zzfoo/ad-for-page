@@ -30,6 +30,10 @@ var proto = {
         }, 60);
     },
 
+    getAd: function(name) {
+        return this._adCache[name];
+    },
+
     createAd: function(options, name) {
         if (this.disabled) return;
         name = name || this._generateName();
