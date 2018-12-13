@@ -14,8 +14,14 @@ var AdManager = function() {};
 
 var proto = {
     constructor: AdManager,
+    disabled: false,
 
     init: function(options, callback) {
+        if (this.disabled) {
+            callback && callback();
+            return;
+        }
+
         var Me = this;
         this.inited = false;
         this._adIndex = 0;
@@ -35,6 +41,7 @@ var proto = {
     },
 
     createAd: function(options, name) {
+        if (this.disabled) return;
         name = name || this._generateName();
         var ad = this.doCreateAd(options);
         this._adCache[name] = ad;
@@ -48,22 +55,36 @@ var proto = {
 
     // user implement
     showAd: function(name, callback) {
+        if (this.disabled) {
+            callback && callback();
+            return;
+        };
+        this.doShowAd(name, callback);
+    },
+
+    doShowAd: function(name, callback) {
         if (callback) {
             setTimeout(function() {
                 callback(null);
             }, 60);
         }
-        return true;
     },
 
     // user implement
     hideAd: function(name, callback) {
+        if (this.disabled) {
+            callback && callback();
+            return;
+        };
+        this.doHideAd(name, callback);
+    },
+
+    doHideAd: function(name, callback) {
         if (callback) {
             setTimeout(function() {
                 callback(null);
             }, 60);
         }
-        return true;
     },
 
     _generateName: function() {
@@ -209,7 +230,7 @@ var proto = {
         return adInfo;
     },
 
-    showAd: function(name, callback) {
+    doShowAd: function(name, callback) {
         var adInfo = this._adCache[name];
         if (adInfo.contianer) {
             this.showContainer(adInfo.contianer);
@@ -220,7 +241,7 @@ var proto = {
             }, 60)
         }
     },
-    hideAd: function (name, callback) {
+    doHideAd: function (name, callback) {
         var adInfo = this._adCache[name];
         if (adInfo.contianer) {
             this.hideContainer(adInfo.contianer);
@@ -381,6 +402,8 @@ var proto = {
         var ad = wx.createBannerAd({
             adUnitId: adUnitId,
             style: {
+                left: 1,
+                top: 1,
                 width: width,
                 height: height,
             }
@@ -396,14 +419,14 @@ var proto = {
                 valign: style.valign,
             });
         })
-        return ad;
+        return name;
     },
 
     parsePercentile: function (value) {
         return parseFloat(value.slice(0, -1)) / 100;
     },
 
-    showAd: function (name, callback) {
+    doShowAd: function (name, callback) {
         var ad = this._adCache[name];
         ad.show().then(function() {
             callback(null);
@@ -412,7 +435,7 @@ var proto = {
         })
     },
 
-    hideAd: function (name, callback) {
+    doHideAd: function (name, callback) {
         var ad = this._adCache[name];
         ad.hide().then(function() {
             callback(null);
