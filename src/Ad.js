@@ -7,16 +7,17 @@ var proto = {
     disabled: false,
 
     init: function(options, callback) {
+        this.inited = false;
+        this.options = options;
+        this._adIndex = 0;
+        this._adCache = {};
+
         if (this.disabled) {
             callback && callback();
             return;
         }
 
         var Me = this;
-        this.inited = false;
-        this._adIndex = 0;
-        this._adCache = {};
-        this.options = options;
         this.onInit(function(err) {
             Me.inited = true;
             callback && callback(err);
