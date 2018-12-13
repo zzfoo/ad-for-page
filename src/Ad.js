@@ -33,7 +33,7 @@ var proto = {
     createAd: function(options, name) {
         if (this.disabled) return;
         name = name || this._generateName();
-        var ad = this.doCreateAd(options);
+        var ad = this.doCreateAd(options, name);
         this._adCache[name] = ad;
         return name;
     },

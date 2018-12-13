@@ -61,7 +61,7 @@ var proto = {
     },
 
     // options
-    doCreateAd: function(options) {
+    doCreateAd: function(options, name) {
         var Me = this;
         var container = options.container || options.parentNode;
 

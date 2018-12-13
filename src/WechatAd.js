@@ -51,7 +51,7 @@ var proto = {
         ad.style.top = top;
     },
 
-    doCreateAd: function (options) {
+    doCreateAd: function (options, name) {
         var windowWidth = this.windowWidth;
         var windowHeight = this.windowHeight;
 
@@ -87,7 +87,7 @@ var proto = {
                 valign: style.valign,
             });
         })
-        return name;
+        return ad;
     },
 
     parsePercentile: function (value) {

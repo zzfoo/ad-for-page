@@ -43,7 +43,7 @@ var proto = {
     createAd: function(options, name) {
         if (this.disabled) return;
         name = name || this._generateName();
-        var ad = this.doCreateAd(options);
+        var ad = this.doCreateAd(options, name);
         this._adCache[name] = ad;
         return name;
     },
@@ -97,6 +97,7 @@ for (var p in proto) {
 }
 
 module.exports = AdManager;
+
 },{}],3:[function(require,module,exports){
 "use strict";
 
@@ -161,7 +162,7 @@ var proto = {
     },
 
     // options
-    doCreateAd: function(options) {
+    doCreateAd: function(options, name) {
         var Me = this;
         var container = options.container || options.parentNode;
 
@@ -383,7 +384,7 @@ var proto = {
         ad.style.top = top;
     },
 
-    doCreateAd: function (options) {
+    doCreateAd: function (options, name) {
         var windowWidth = this.windowWidth;
         var windowHeight = this.windowHeight;
 
@@ -419,7 +420,7 @@ var proto = {
                 valign: style.valign,
             });
         })
-        return name;
+        return ad;
     },
 
     parsePercentile: function (value) {
