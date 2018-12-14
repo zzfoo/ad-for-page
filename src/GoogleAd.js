@@ -118,6 +118,7 @@ var proto = {
                 container.style.bottom = "0px";
             }
         }
+        this.hideContainer(container);
 
         window['adsbygoogle'].push({});
 
@@ -126,7 +127,6 @@ var proto = {
             options: options,
             contianer: container,
         };
-
         return adInfo;
     },
 

@@ -41,9 +41,9 @@ var switchAdState = function() {};
             if (!adName) {
                 adName = adManager.createAd({
                     id: 'ca-pub-9274896770936398',
-                    // parentNode: document.getElementById('ad-container'),
-                    slot: '1422226952',
-                    visible: true,
+                    parentNode: document.getElementById('ad-container'),
+                    slot: '8680117483',
+                    // visible: true,
                     width: 320,
                     height: 50,
                     responsive: false,
@@ -62,19 +62,19 @@ var switchAdState = function() {};
         }
     })
 
-    var adForPageManager = new AFP.WechatAdManager();
-    var adName = null;
-    adForPageManager.init(null, function() {
-        adName = adForPageManager.createAd({
-            adUnitId: '',
-            style: {
-                width: '100%',
-                height: 200,
-                valign: 'bottom',
-                align: 'center',
-            }
-        })
-        adForPageManager.showAd(adName);
-    });
+    // var adForPageManager = new AFP.WechatAdManager();
+    // var adName = null;
+    // adForPageManager.init(null, function() {
+    //     adName = adForPageManager.createAd({
+    //         adUnitId: '',
+    //         style: {
+    //             width: '100%',
+    //             height: 200,
+    //             valign: 'bottom',
+    //             align: 'center',
+    //         }
+    //     })
+    //     adForPageManager.showAd(adName);
+    // });
 }())
 

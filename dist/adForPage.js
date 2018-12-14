@@ -14,13 +14,20 @@ var AdManager = function() {};
 
 var proto = {
     constructor: AdManager,
+    disabled: false,
 
     init: function(options, callback) {
-        var Me = this;
         this.inited = false;
+        this.options = options;
         this._adIndex = 0;
         this._adCache = {};
-        this.options = options;
+
+        if (this.disabled) {
+            callback && callback();
+            return;
+        }
+
+        var Me = this;
         this.onInit(function(err) {
             Me.inited = true;
             callback && callback(err);
@@ -34,9 +41,14 @@ var proto = {
         }, 60);
     },
 
+    getAd: function(name) {
+        return this._adCache[name];
+    },
+
     createAd: function(options, name) {
+        if (this.disabled) return;
         name = name || this._generateName();
-        var ad = this.doCreateAd(options);
+        var ad = this.doCreateAd(options, name);
         this._adCache[name] = ad;
         return name;
     },
@@ -48,22 +60,36 @@ var proto = {
 
     // user implement
     showAd: function(name, callback) {
+        if (this.disabled) {
+            callback && callback();
+            return;
+        };
+        this.doShowAd(name, callback);
+    },
+
+    doShowAd: function(name, callback) {
         if (callback) {
             setTimeout(function() {
                 callback(null);
             }, 60);
         }
-        return true;
     },
 
     // user implement
     hideAd: function(name, callback) {
+        if (this.disabled) {
+            callback && callback();
+            return;
+        };
+        this.doHideAd(name, callback);
+    },
+
+    doHideAd: function(name, callback) {
         if (callback) {
             setTimeout(function() {
                 callback(null);
             }, 60);
         }
-        return true;
     },
 
     _generateName: function() {
@@ -76,6 +102,7 @@ for (var p in proto) {
 }
 
 module.exports = AdManager;
+
 },{}],3:[function(require,module,exports){
 "use strict";
 
@@ -140,7 +167,7 @@ var proto = {
     },
 
     // options
-    doCreateAd: function(options) {
+    doCreateAd: function(options, name) {
         var Me = this;
         var container = options.container || options.parentNode;
 
@@ -197,6 +224,7 @@ var proto = {
                 container.style.bottom = "0px";
             }
         }
+        this.hideContainer(container);
 
         window['adsbygoogle'].push({});
 
@@ -205,11 +233,10 @@ var proto = {
             options: options,
             contianer: container,
         };
-
         return adInfo;
     },
 
-    showAd: function(name, callback) {
+    doShowAd: function(name, callback) {
         var adInfo = this._adCache[name];
         if (adInfo.contianer) {
             this.showContainer(adInfo.contianer);
@@ -220,7 +247,7 @@ var proto = {
             }, 60)
         }
     },
-    hideAd: function (name, callback) {
+    doHideAd: function (name, callback) {
         var adInfo = this._adCache[name];
         if (adInfo.contianer) {
             this.hideContainer(adInfo.contianer);
@@ -326,26 +353,13 @@ var proto = {
         callback(err);
     },
 
-    doCreateAd: function (options) {
+    alginAd: function(ad, style) {
         var windowWidth = this.windowWidth;
         var windowHeight = this.windowHeight;
-
-        var adUnitId = options.adUnitId;
-        var style = options.style;
         var width = style.width;
         var height = style.height;
         var align = style.align;
         var valign = style.valign;
-        if (!width || !height) {
-            throw new Error('need width and height');
-        }
-        if (typeof width !== 'number') {
-            width = this.parsePercentile(width) * windowWidth;
-        }
-        if (typeof height !== 'number') {
-            height = this.parsePercentile(height) * windowHeight;
-        }
-
         var left;
         if (align) {
             if (align === 'center') {
@@ -356,31 +370,61 @@ var proto = {
                 left = 0;
             }
         } else {
-            left = option.left || 0;
+            left = style.left || 0;
         }
 
         var top;
         if (valign) {
-            if (align === 'center') {
+            if (valign === 'center') {
                 top = (windowHeight - height) / 2;
-            } else if (align === 'bottom') {
+            } else if (valign === 'bottom') {
                 top = windowHeight - height;
-            } else if (align === 'top') {
+            } else if (valign === 'top') {
                 top = 0;
             }
         } else {
-            top = options.top || 0;
+            top = style.top || 0;
+        }
+        ad.style.left = left;
+        ad.style.top = top;
+    },
+
+    doCreateAd: function (options, name) {
+        var windowWidth = this.windowWidth;
+        var windowHeight = this.windowHeight;
+
+        var adUnitId = options.adUnitId;
+        var style = options.style;
+        var width = style.width;
+        var height = style.height;
+
+        if (typeof width === 'string') {
+            width = this.parsePercentile(width) * windowWidth;
+        }
+        if (typeof height === 'string') {
+            height = this.parsePercentile(height) * windowHeight;
         }
 
         var ad = wx.createBannerAd({
             adUnitId: adUnitId,
             style: {
-                left: left,
-                top: top,
+                left: 1,
+                top: 1,
                 width: width,
                 height: height,
             }
         });
+        var Me = this;
+        ad.onResize(function(res) {
+            Me.alginAd(ad, {
+                width: res.width,
+                height: res.height,
+                left: style.left,
+                top: style.top,
+                align: style.align,
+                valign: style.valign,
+            });
+        })
         return ad;
     },
 
@@ -388,8 +432,8 @@ var proto = {
         return parseFloat(value.slice(0, -1)) / 100;
     },
 
-    showAd: function (name, callback) {
-        var ad = this._adCahe[name];
+    doShowAd: function (name, callback) {
+        var ad = this._adCache[name];
         ad.show().then(function() {
             callback(null);
         }).catch(function(err) {
@@ -397,8 +441,8 @@ var proto = {
         })
     },
 
-    hideAd: function (name, callback) {
-        var ad = this._adCahe[name];
+    doHideAd: function (name, callback) {
+        var ad = this._adCache[name];
         ad.hide().then(function() {
             callback(null);
         }).catch(function(err) {
