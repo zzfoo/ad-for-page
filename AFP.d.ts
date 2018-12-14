@@ -30,10 +30,10 @@ declare namespace AFP {
     export interface GoogleAdOptions {
         parentNode?,
         name?: string,
-        id: string,
-        slot: string,
-        width: number,
-        height: number,
+        id?: string,
+        slot?: string,
+        width?: number,
+        height?: number,
         containerStyle?: any,
         responsive?: boolean,
         banner?: boolean,
@@ -45,7 +45,7 @@ declare namespace AFP {
     export interface WechatAdManagerOptions {
     }
     export interface WechatAdOptions {
-        adUnitId,
+        adUnitId?,
         style: {
             /** e.g. 200 or '50%' */
             widths: number | string,
