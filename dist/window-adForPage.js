@@ -456,9 +456,9 @@ var proto = {
     doHideAd: function(name, callback) {
         var ad = this._adCache[name];
         ad.hide().then(function() {
-            callback(null);
+            callback && callback(null);
         }).catch(function(err) {
-            callback(err);
+            callback && callback(err);
         })
     },
 };
