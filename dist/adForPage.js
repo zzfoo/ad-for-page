@@ -337,11 +337,11 @@ module.exports = GoogleAdManager;
 
 },{"./Ad.js":2}],4:[function(require,module,exports){
 var AdManager = require('./Ad.js');
-var WechatAdManager = function () { }
+var WechatAdManager = function() {}
 var proto = {
     windowWidth: null,
     windowHeight: null,
-    onInit: function (callback) {
+    onInit: function(callback) {
         var err = null;
         if (!wx.createBannerAd) {
             err = '微信版本过低';
@@ -389,7 +389,7 @@ var proto = {
         ad.style.top = top;
     },
 
-    doCreateAd: function (options, name) {
+    doCreateAd: function(options, name) {
         var windowWidth = this.windowWidth;
         var windowHeight = this.windowHeight;
 
@@ -415,6 +415,8 @@ var proto = {
             }
         });
         var Me = this;
+
+        var onResize = options.onResize;
         ad.onResize(function(res) {
             Me.alginAd(ad, {
                 width: res.width,
@@ -424,15 +426,25 @@ var proto = {
                 align: style.align,
                 valign: style.valign,
             });
-        })
+            onResize && onResize.call(ad, res);
+        });
+
+        var onError = options.onError;
+        ad.onError(function(err) {
+            if (onError) {
+                onError.call(ad, err);
+            } else {
+                console.warn(err);
+            }
+        });
         return ad;
     },
 
-    parsePercentile: function (value) {
+    parsePercentile: function(value) {
         return parseFloat(value.slice(0, -1)) / 100;
     },
 
-    doShowAd: function (name, callback) {
+    doShowAd: function(name, callback) {
         var ad = this._adCache[name];
         ad.show().then(function() {
             callback && callback(null);
@@ -441,7 +453,7 @@ var proto = {
         })
     },
 
-    doHideAd: function (name, callback) {
+    doHideAd: function(name, callback) {
         var ad = this._adCache[name];
         ad.hide().then(function() {
             callback(null);
