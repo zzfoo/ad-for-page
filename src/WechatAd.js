@@ -97,9 +97,9 @@ var proto = {
     doShowAd: function (name, callback) {
         var ad = this._adCache[name];
         ad.show().then(function() {
-            callback(null);
+            callback && callback(null);
         }).catch(function(err) {
-            callback(err);
+            callback && callback(err);
         })
     },
 
