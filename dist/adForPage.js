@@ -343,7 +343,7 @@ var proto = {
     windowWidth: null,
     windowHeight: null,
     onInit: function(callback) {
-        callback(err);
+        callback(null);
     },
 
     alginAd: function(ad, style) {
