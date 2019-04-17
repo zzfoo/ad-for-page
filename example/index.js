@@ -6,7 +6,7 @@ var switchAdState = function() {};
     // var adName = null;
     // adManager.init('google', function() {
     //     console.log('ad manager inited!!!');
-        
+
     //     hideAd = function() {
     //         if (!adName) {
     //             adName = adManager.createAd({
@@ -21,7 +21,7 @@ var switchAdState = function() {};
     //                 align: 'center',
     //             })
     //         }
-            
+
     //         if (showing) {
     //             adManager.hideAd(adName);
     //             showing = false;
