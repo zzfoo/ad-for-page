@@ -404,15 +404,19 @@ var proto = {
             height = this.parsePercentile(height) * windowHeight;
         }
 
+
+        var realStyle = {
+            left: 1,
+            top: 1,
+            width: width,
+        }
+        if (height && height !== 0) {
+            realStyle.height = height
+        }
         var ad = wx.createBannerAd({
             adUnitId: adUnitId,
             appSid: appSid,
-            style: {
-                left: 1,
-                top: 1,
-                width: width,
-                height: height,
-            }
+            style: realStyle
         });
         var Me = this;
 
@@ -455,11 +459,10 @@ var proto = {
 
     doHideAd: function(name, callback) {
         var ad = this._adCache[name];
-        ad.hide().then(function() {
-            callback && callback(null);
-        }).catch(function(err) {
-            callback && callback(err);
-        })
+        ad.hide()
+        setTimeout(function(){
+            callback && callback(null)
+        }, 10);
     },
 };
 for (var p in AdManager.prototype) {
