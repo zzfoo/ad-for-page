@@ -7,7 +7,7 @@ var proto = {
         callback(null);
     },
 
-    alginAd: function(ad, style) {
+    alignAd: function(ad, style) {
         var windowWidth = this.windowWidth;
         var windowHeight = this.windowHeight;
         var width = style.width;
@@ -81,9 +81,20 @@ var proto = {
         });
         var Me = this;
 
+        if (options.immediateAlign) {
+            this.alignAd(ad, {
+                width: realStyle.width,
+                height: realStyle.width / 3,
+                left: realStyle.left,
+                top: realStyle.top,
+                align: style.align,
+                valign: style.valign,
+            })
+        }
+
         var onResize = options.onResize;
         ad.onResize(function(res) {
-            Me.alginAd(ad, {
+            Me.alignAd(ad, {
                 width: res.width,
                 height: res.height,
                 left: style.left,

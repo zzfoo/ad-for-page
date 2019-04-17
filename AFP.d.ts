@@ -47,6 +47,7 @@ declare namespace AFP {
     export interface WechatAdOptions {
         adUnitId?,
         appSid?,
+        immediateAlign?: boolean,
         style?: {
             /** e.g. 200 or '50%' */
             width: number | string,
