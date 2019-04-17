@@ -4,14 +4,6 @@ var proto = {
     windowWidth: null,
     windowHeight: null,
     onInit: function(callback) {
-        var err = null;
-        if (!wx.createBannerAd) {
-            err = '微信版本过低';
-        } else {
-            var systemInfo = wx.getSystemInfoSync();
-            this.windowWidth = systemInfo.windowWidth;
-            this.windowHeight = systemInfo.windowHeight;
-        }
         callback(err);
     },
 
@@ -52,10 +44,16 @@ var proto = {
     },
 
     doCreateAd: function(options, name) {
+        var wx = options.wx || window['wx']
+        var systemInfo = wx.getSystemInfoSync();
+        this.windowWidth = systemInfo.windowWidth;
+        this.windowHeight = systemInfo.windowHeight;
+
         var windowWidth = this.windowWidth;
         var windowHeight = this.windowHeight;
 
         var adUnitId = options.adUnitId;
+        var appSid = options.appSid;
         var style = options.style;
         var width = style.width;
         var height = style.height;
@@ -69,6 +67,7 @@ var proto = {
 
         var ad = wx.createBannerAd({
             adUnitId: adUnitId,
+            appSid: appSid,
             style: {
                 left: 1,
                 top: 1,
