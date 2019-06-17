@@ -4,6 +4,7 @@ var proto = {
     windowWidth: null,
     windowHeight: null,
     onInit: function(callback) {
+        this.systemInfo = wx.getSystemInfoSync()
         callback(null);
     },
 
@@ -45,7 +46,7 @@ var proto = {
 
     doCreateAd: function(options, name) {
         var wx = options.wx || window['wx']
-        var systemInfo = wx.getSystemInfoSync();
+        var systemInfo = this.systemInfo;
         this.windowWidth = systemInfo.windowWidth;
         this.windowHeight = systemInfo.windowHeight;
 
