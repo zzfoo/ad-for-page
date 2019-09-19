@@ -61,4 +61,13 @@ declare namespace AFP {
     }
     export class WechatAdManager extends AdManager {
     }
+    export interface HippoAdManagerOptions {
+        HippoAdSDK?
+        adIds?
+    }
+    export interface HippoAdOptions {
+        adId
+    }
+    export class HippoAdManager extends AdManager {
+    }
 }

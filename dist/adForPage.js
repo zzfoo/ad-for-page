@@ -2,12 +2,14 @@
 var AdManager = require('./src/Ad.js');
 var GoogleAdManager = require('./src/GoogleAd.js');
 var WechatAdManager = require('./src/WechatAd.js');
+var HippoAdManager = require('./src/HippoAd.js');
 module.exports = {
     AdManager: AdManager,
     GoogleAdManager: GoogleAdManager,
     WechatAdManager: WechatAdManager,
+    HippoAdManager: HippoAdManager,
 };
-},{"./src/Ad.js":2,"./src/GoogleAd.js":3,"./src/WechatAd.js":4}],2:[function(require,module,exports){
+},{"./src/Ad.js":2,"./src/GoogleAd.js":3,"./src/HippoAd.js":4,"./src/WechatAd.js":5}],2:[function(require,module,exports){
 "use strict";
 
 var AdManager = function() {};
@@ -338,15 +340,61 @@ module.exports = GoogleAdManager;
 
 },{"./Ad.js":2}],4:[function(require,module,exports){
 var AdManager = require('./Ad.js');
+var HippoAdManager = function () { }
+var proto = {
+  HippoAdSDK: null,
+  onInit: function (callback) {
+    var options = this.options
+    this.HippoAdSDK = options.HippoAdSDK
+    var adIds = options.adIds
+    HippoAdSDK.initBannerAd(adIds, function(hippoPlacementId, success) {
+      var err = success ? null : 'HippoAdSDK initBannerAd err'
+      callback(err);
+    });
+  },
+
+  doCreateAd: function (options, name) {
+    var ad = options.adId
+    return ad;
+  },
+
+  doShowAd: function (name, callback) {
+    var ad = this._adCache[name];
+    this.manager.HippoAdSDK.showBannerAd(ad, function( success, errorMessage) {
+      var err = success ? null : errorMessage
+      callback(err)
+    });
+  },
+
+  doHideAd: function (name, callback) {
+    var ad = this._adCache[name];
+    this.manager.HippoAdSDK.hideBannerAd(ad);
+    setTimeout(function () {
+      callback && callback(null)
+    }, 10);
+  },
+};
+for (var p in AdManager.prototype) {
+  HippoAdManager.prototype[p] = AdManager.prototype[p];
+}
+
+for (var p in proto) {
+  HippoAdManager.prototype[p] = proto[p];
+}
+module.exports = HippoAdManager;
+
+},{"./Ad.js":2}],5:[function(require,module,exports){
+var AdManager = require('./Ad.js');
 var WechatAdManager = function() {}
 var proto = {
     windowWidth: null,
     windowHeight: null,
     onInit: function(callback) {
+        this.systemInfo = wx.getSystemInfoSync()
         callback(null);
     },
 
-    alginAd: function(ad, style) {
+    alignAd: function(ad, style) {
         var windowWidth = this.windowWidth;
         var windowHeight = this.windowHeight;
         var width = style.width;
@@ -384,7 +432,7 @@ var proto = {
 
     doCreateAd: function(options, name) {
         var wx = options.wx || window['wx']
-        var systemInfo = wx.getSystemInfoSync();
+        var systemInfo = this.systemInfo;
         this.windowWidth = systemInfo.windowWidth;
         this.windowHeight = systemInfo.windowHeight;
 
@@ -420,9 +468,20 @@ var proto = {
         });
         var Me = this;
 
+        if (options.immediateAlign) {
+            this.alignAd(ad, {
+                width: realStyle.width,
+                height: realStyle.width / 3,
+                left: realStyle.left,
+                top: realStyle.top,
+                align: style.align,
+                valign: style.valign,
+            })
+        }
+
         var onResize = options.onResize;
         ad.onResize(function(res) {
-            Me.alginAd(ad, {
+            Me.alignAd(ad, {
                 width: res.width,
                 height: res.height,
                 left: style.left,
