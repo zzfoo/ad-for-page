@@ -6,10 +6,14 @@ var proto = {
     var options = this.options
     this.HippoAdSDK = options.HippoAdSDK
     var adIds = options.adIds
-    HippoAdSDK.initBannerAd(adIds, function(hippoPlacementId, success) {
-      var err = success ? null : 'HippoAdSDK initBannerAd err'
-      callback(err);
-    });
+    HippoAdSDK.initBannerAd(adIds, this.onAdLoaded.bind(this));
+    setTimeout(function() {
+      callback(null)
+    }, 20)
+  },
+
+  onAdLoaded(id, success) {
+    return
   },
 
   doCreateAd: function (options, name) {
