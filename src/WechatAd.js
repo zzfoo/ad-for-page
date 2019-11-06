@@ -56,6 +56,7 @@ var proto = {
 
         var adUnitId = options.adUnitId;
         var appSid = options.appSid;
+        var posId = options.posId;
         var style = options.style;
         var width = style.width;
         var height = style.height;
@@ -79,6 +80,7 @@ var proto = {
         var ad = wx.createBannerAd({
             adUnitId: adUnitId,
             appSid: appSid,
+            posId: posId,
             style: realStyle
         });
         var Me = this;
@@ -124,11 +126,14 @@ var proto = {
 
     doShowAd: function(name, callback) {
         var ad = this._adCache[name];
-        ad.show().then(function() {
-            callback && callback(null);
-        }).catch(function(err) {
-            callback && callback(err);
-        })
+        const promise = ad.show()
+        if (promise) {
+            promise.then(function() {
+                callback && callback(null);
+            }).catch(function(err) {
+                callback && callback(err);
+            })
+        }
     },
 
     doHideAd: function(name, callback) {
