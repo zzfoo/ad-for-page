@@ -4,6 +4,7 @@ var proto = {
     windowWidth: null,
     windowHeight: null,
     onInit: function(callback) {
+        var wx = this.options.wx || window['wx']
         this.systemInfo = wx.getSystemInfoSync()
         callback(null);
     },
