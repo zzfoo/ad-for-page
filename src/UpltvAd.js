@@ -10,7 +10,7 @@ var proto = {
 
   doShowAd: function (name, callback) {
     const upltv = window['upltv'];
-    const ad = this.this._adCache[name];
+    const ad = this._adCache[name];
     upltv.showBannerAdAtBottom(ad.adUnitId)
   },
 
