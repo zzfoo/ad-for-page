@@ -3,13 +3,15 @@ var UpltvAdManager = function () { }
 var proto = {
 
   doCreateAd: function (options) {
-    var ad = options.adUnitId
+    const ad = {}
+    ad.adUnitId = options.adUnitId
     return ad;
   },
 
   doShowAd: function (name, callback) {
     const upltv = window['upltv'];
-    upltv.showBannerAdAtBottom(name)
+    const ad = this.this._adCache[name];
+    upltv.showBannerAdAtBottom(ad.adUnitId)
   },
 
   doHideAd: function (name, callback) {
